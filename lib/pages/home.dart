@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../models/post.dart';
 import '../repository/post_repository.dart';
 import '../utils/constants.dart';
-import '../widgets/category_card.dart';
 import '../widgets/post_card.dart';
 
 class Home extends StatefulWidget {
@@ -15,9 +14,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final PostRepository postRepository = PostRepository();
-  late List<Post> posts;
-  late List<Post> filteredPosts;
-  late List<Post> sortedPost = [];
+  List<Post> posts = [];
+  List<Post> filteredPosts = [];
+  // List<Post> sortedPost = [];
 
   List<String> categories = [
     'All',
@@ -27,6 +26,7 @@ class _HomeState extends State<Home> {
     'Nature',
     'Technology'
   ];
+
 
   String selectedCategory = 'All';
   bool isSortedByDate = false;
@@ -40,101 +40,80 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.filter_list_rounded),
-            onPressed: () {
-              setState(() {
-                isSortedByDate = !isSortedByDate;
-              });
-            },
-          ),
-          scrolledUnderElevation: 0.0,
-          backgroundColor: Colors.white,
-          title: Text('Freely', style: montserratHeader.copyWith(fontSize: 22)),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: categories.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            var category = categories[index];
-                            return Center(
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedCategory = category;
-                                  });
-                                },
-                                child: CategoryCard(
-                                  category: category,
-                                  isSelected: category == selectedCategory,
-                                ),
-                              ),
-                            );
-                          }),
-                    )
-                  ],
+    return DefaultTabController(
+        length: categories.length,
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.sort),
+                onPressed: () {
+                  setState(() {
+                    isSortedByDate = !isSortedByDate;
+                  });
+                },
+              ),
+              scrolledUnderElevation: 0.0,
+              backgroundColor: Colors.white,
+              title: Text('Freely',
+                  style: montserratHeader.copyWith(fontSize: 22)),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(48.0),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TabBar(
+                    tabAlignment: TabAlignment.start,
+                    labelStyle: montserratBody.copyWith(color: Colors.black),
+                    isScrollable: true,
+                    tabs: categories.map((category) {
+                      return Tab(text: category);
+                    }).toList(),
+                  ),
                 ),
               ),
 
-              //thats for listing the posts
-              Expanded(
-                flex: 16,
-                child: FutureBuilder<List<Post>>(
-                  future: _postFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return const Center(child: Text('error occurred'));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('no post available!'));
-                    } else {
-                      posts = snapshot.data!;
-                      filteredPosts = selectedCategory == 'All'
+
+            ),
+            body: FutureBuilder<List<Post>>(
+              future: _postFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('error occurred'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('no post available!'));
+                } else {
+                  posts = snapshot.data!;
+                  return TabBarView(
+                    children: categories.map((category) {
+                      //her kategori icin ayri ayri icerik olusturuluyor
+                      List<Post> filteredPosts = category == 'All'
                           ? posts
                           : posts
-                              .where(
-                                  (post) => post.category == selectedCategory)
+                              .where((post) => post.category == category)
                               .toList();
-                      if (isSortedByDate) {
-                        sortedPost = List.from(
-                            filteredPosts); //filteredpost listesini kopyaliyorum
-                        getSortedPosts();
-                      } else {
-                        sortedPost = filteredPosts;
-                      }
 
+                      List<Post> displayedPosts = filteredPosts;
+                      if (isSortedByDate) {
+                        displayedPosts = List.from(filteredPosts);
+                        getSortedPosts(displayedPosts);
+                      }
                       return ListView.builder(
-                        itemCount: sortedPost.length,
+                        itemCount: displayedPosts.length,
                         itemBuilder: (context, index) {
-                          final post = sortedPost[index];
-                          print('sorted posts: ${post.formattedTime}');
-                          return PostCard(
-                              post: post, category: selectedCategory);
+                          final post = displayedPosts[index];
+                          return PostCard(post: post, category: category);
                         },
                       );
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-        ));
+                    }).toList(),
+                  );
+                }
+              },
+            )));
   }
 
-  void getSortedPosts() {
+  void getSortedPosts(List<Post> sortedPost) {
     sortedPost.sort((a, b) => b.createdAt
         .compareTo(a.createdAt)); // Sort by createdAt, not formattedTime
   }

@@ -12,7 +12,7 @@ class PostRepository {
       var postList = querySnapshot.docs
           .map((doc) => Post.fromMap(doc.data() as Map<String, dynamic>, doc.id))
           .toList();
-      Future.delayed(const Duration(seconds: 30));
+      // Future.delayed(const Duration(seconds: 30));
       return postList;
 
     } catch (e) {
