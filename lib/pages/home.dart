@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../models/post.dart';
+import '../models/user.dart';
 import '../repository/post_repository.dart';
 import '../utils/constants.dart';
 import '../widgets/post_card.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final User? currentUser;
+
+  const Home({super.key, this.currentUser});
 
   @override
   State<Home> createState() => _HomeState();
@@ -16,7 +19,6 @@ class _HomeState extends State<Home> {
   final PostRepository postRepository = PostRepository();
   List<Post> posts = [];
   List<Post> filteredPosts = [];
-  // List<Post> sortedPost = [];
 
   List<String> categories = [
     'All',
@@ -27,10 +29,14 @@ class _HomeState extends State<Home> {
     'Technology'
   ];
 
+  int currentPageIndex = 0;
 
   String selectedCategory = 'All';
   bool isSortedByDate = false;
   late Future<List<Post>> _postFuture;
+
+
+
 
   @override
   void initState() {
@@ -58,21 +64,32 @@ class _HomeState extends State<Home> {
               title: Text('Freely',
                   style: montserratHeader.copyWith(fontSize: 22)),
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(48.0),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: TabBar(
-                    tabAlignment: TabAlignment.start,
-                    labelStyle: montserratBody.copyWith(color: Colors.black),
-                    isScrollable: true,
-                    tabs: categories.map((category) {
-                      return Tab(text: category);
-                    }).toList(),
-                  ),
+                preferredSize: const Size.fromHeight(80.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        textAlign: TextAlign.left,
+                        'Welcome ${widget.currentUser?.name ?? ''}!',
+                        // Display user's name if available
+                        style: montserratBody.copyWith(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    TabBar(
+                      tabAlignment: TabAlignment.start,
+                      labelStyle: montserratBody.copyWith(color: Colors.black),
+                      isScrollable: true,
+                      tabs: categories.map((category) {
+                        return Tab(text: category);
+                      }).toList(),
+                    ),
+                  ],
                 ),
               ),
-
-
             ),
             body: FutureBuilder<List<Post>>(
               future: _postFuture,
@@ -103,7 +120,8 @@ class _HomeState extends State<Home> {
                         itemCount: displayedPosts.length,
                         itemBuilder: (context, index) {
                           final post = displayedPosts[index];
-                          return PostCard(post: post, category: category);
+                          return PostCard(post: post, category: category
+                            );
                         },
                       );
                     }).toList(),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utils/constants.dart'; // montserratBody'yi içeriyor
+import '../utils/constants.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({super.key, required this.label, this.onPressed});

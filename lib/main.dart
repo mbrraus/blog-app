@@ -1,4 +1,7 @@
+import 'package:blog_app/auth/login_screen.dart';
+import 'package:blog_app/auth/signup_screen.dart';
 import 'package:blog_app/pages/home.dart';
+import 'package:blog_app/pages/home_main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +25,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Freely',
-      home: Home(),
+      home: HomeMain(),
     );
   }
 }
