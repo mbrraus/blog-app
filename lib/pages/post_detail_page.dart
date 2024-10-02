@@ -5,7 +5,6 @@ import '../models/post.dart';
 
 class PostDetailPage extends StatelessWidget {
   final Post post;
-
   const PostDetailPage({super.key, required this.post});
 
   @override

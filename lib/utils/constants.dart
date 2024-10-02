@@ -22,6 +22,29 @@ TextStyle montserratBody = const TextStyle(
   ],
 );
 
+TextStyle montserratAuth = const TextStyle(
+  fontFamily: 'Montserrat',
+  fontSize: 15,
+  color: Colors.black,
+  fontVariations: [
+    FontVariation('ital', 0),
+    FontVariation('wght', 500),
+    FontVariation('ital', 1),
+    FontVariation('wght', 500)
+  ],
+);
+TextStyle montserratHint = const TextStyle(
+  fontFamily: 'Montserrat',
+  fontSize: 15,
+  color: Colors.black,
+  fontVariations: [
+    FontVariation('ital', 0),
+    FontVariation('wght', 350),
+    FontVariation('ital', 1),
+    FontVariation('wght', 350)
+  ],
+);
+
 TextStyle montserratBold = const TextStyle(
   color: Colors.white,
   fontFamily: 'Montserrat',
@@ -60,3 +83,4 @@ TextStyle homePostTitle = const TextStyle(
 //colors
 const Color background = Color(0xFFF3E7DC);
 const Color welcomeText = Color(0xffEAAFB8);
+
