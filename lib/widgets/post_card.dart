@@ -1,6 +1,6 @@
-import 'package:blog_app/pages/post_detail_page.dart';
 import 'package:blog_app/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../models/post.dart';
 
@@ -14,10 +14,7 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PostDetailPage(post: post)));
+        Get.toNamed('/details', arguments: post);
       },
       child: Card(
         margin: const EdgeInsets.all(10),
