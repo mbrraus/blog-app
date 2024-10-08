@@ -1,6 +1,4 @@
 import 'package:blog_app/auth/login_screen.dart';
-import 'package:blog_app/auth/signup_screen.dart';
-import 'package:blog_app/pages/home.dart';
 import 'package:blog_app/pages/home_main.dart';
 import 'package:blog_app/pages/post_detail_page.dart';
 import 'package:blog_app/widgets/navbar_auth.dart';

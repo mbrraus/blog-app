@@ -1,8 +1,5 @@
-import 'package:blog_app/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-
-import 'category.dart';
 
 class Post {
   String? id;

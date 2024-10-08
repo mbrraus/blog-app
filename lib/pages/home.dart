@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import '../controller/post_controller.dart';
 import '../models/post.dart';
 import '../models/user.dart';
-import '../repository/post_repository.dart';
 import '../utils/constants.dart';
 import '../widgets/post_card.dart';
 

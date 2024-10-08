@@ -1,9 +1,7 @@
-import 'package:blog_app/auth/login_screen.dart';
 import 'package:blog_app/models/user.dart';
 import 'package:blog_app/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class NavbarAuth extends StatefulWidget {
 
