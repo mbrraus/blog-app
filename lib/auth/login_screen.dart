@@ -1,11 +1,11 @@
 import 'package:blog_app/auth/auth_service.dart';
 import 'package:blog_app/auth/signup_screen.dart';
-import 'package:blog_app/pages/home.dart';
 import 'package:blog_app/pages/home_main.dart';
 import 'package:blog_app/repository/user_repository.dart';
 import 'package:blog_app/utils/constants.dart';
 import 'package:blog_app/widgets/custom_tf.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,7 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Colors.indigo,
             icon: Icon(Icons.arrow_back_ios_new),
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> HomeMain()));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => HomeMain()));
             },
           ),
         ),
@@ -103,9 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print('user logged in');
       final user = await userRepository.getUserById(firebaseUser.uid);
       if (user != null) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => Home(currentUser: user)),
-            (Route route) => false);
+        Get.toNamed('/navbarAuth', arguments: user);
       }
     }
   }

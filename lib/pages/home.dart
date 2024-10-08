@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import '../controller/post_controller.dart';
 import '../models/post.dart';
 import '../models/user.dart';
 import '../repository/post_repository.dart';
@@ -16,9 +17,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final PostRepository postRepository = PostRepository();
   List<Post> posts = [];
-  List<Post> filteredPosts = [];
 
   List<String> categories = [
     'All',
@@ -32,16 +31,13 @@ class _HomeState extends State<Home> {
   int currentPageIndex = 0;
 
   String selectedCategory = 'All';
-  bool isSortedByDate = false;
-  late Future<List<Post>> _postFuture;
 
-
-
+  final PostController postController = Get.put(PostController());
 
   @override
   void initState() {
     super.initState();
-    _postFuture = postRepository.getAllPosts();
+    postController.loadPosts(); //ilk basta butun postlar yukleniyor ve displayedposta ataniyor
   }
 
   @override
@@ -54,9 +50,7 @@ class _HomeState extends State<Home> {
               leading: IconButton(
                 icon: const Icon(Icons.sort),
                 onPressed: () {
-                  setState(() {
-                    isSortedByDate = !isSortedByDate;
-                  });
+                  postController.toggleSort();
                 },
               ),
               scrolledUnderElevation: 0.0,
@@ -80,6 +74,10 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     TabBar(
+                      onTap: (index) {
+                        selectedCategory = categories[index];
+                        postController.getFilteredPosts(selectedCategory);
+                      },
                       tabAlignment: TabAlignment.start,
                       labelStyle: montserratBody.copyWith(color: Colors.black),
                       isScrollable: true,
@@ -91,48 +89,18 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            body: FutureBuilder<List<Post>>(
-              future: _postFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('error occurred'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('no post available!'));
-                } else {
-                  posts = snapshot.data!;
-                  return TabBarView(
-                    children: categories.map((category) {
-                      //her kategori icin ayri ayri icerik olusturuluyor
-                      List<Post> filteredPosts = category == 'All'
-                          ? posts
-                          : posts
-                              .where((post) => post.category == category)
-                              .toList();
-
-                      List<Post> displayedPosts = filteredPosts;
-                      if (isSortedByDate) {
-                        displayedPosts = List.from(filteredPosts);
-                        getSortedPosts(displayedPosts);
-                      }
-                      return ListView.builder(
-                        itemCount: displayedPosts.length,
-                        itemBuilder: (context, index) {
-                          final post = displayedPosts[index];
-                          return PostCard(post: post, category: category
-                            );
-                        },
-                      );
-                    }).toList(),
-                  );
-                }
-              },
-            )));
-  }
-
-  void getSortedPosts(List<Post> sortedPost) {
-    sortedPost.sort((a, b) => b.createdAt
-        .compareTo(a.createdAt)); // Sort by createdAt, not formattedTime
+            body: GetBuilder<PostController>(builder: (controller) {
+              if (controller.posts.isEmpty) {
+                return Center(child: Text('No posts available!'));
+              } else {
+                return ListView.builder(
+                  itemCount: controller.displayedPosts.length,
+                  itemBuilder: (context, index) {
+                    final post = controller.displayedPosts[index];
+                    return PostCard(post: post, category: selectedCategory);
+                  },
+                );
+              }
+            })));
   }
 }

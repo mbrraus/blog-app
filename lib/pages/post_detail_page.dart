@@ -1,14 +1,16 @@
 import 'package:blog_app/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../models/post.dart';
 
 class PostDetailPage extends StatelessWidget {
-  final Post post;
-  const PostDetailPage({super.key, required this.post});
+  const PostDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final Post post = Get.arguments;
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -20,7 +22,7 @@ class PostDetailPage extends StatelessWidget {
                 Align(
                   alignment: Alignment.topLeft,
                   child: GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
+                    onTap: () => Get.back(),
                     child: const Icon(
                       Icons.arrow_back_ios_new,
                       color: Colors.indigo,
