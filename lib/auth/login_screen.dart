@@ -1,6 +1,5 @@
 import 'package:blog_app/auth/auth_service.dart';
 import 'package:blog_app/auth/signup_screen.dart';
-import 'package:blog_app/pages/home_main.dart';
 import 'package:blog_app/repository/user_repository.dart';
 import 'package:blog_app/utils/constants.dart';
 import 'package:blog_app/widgets/custom_tf.dart';
@@ -29,8 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Colors.indigo,
             icon: Icon(Icons.arrow_back_ios_new),
             onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => HomeMain()));
+              Get.back();
             },
           ),
         ),

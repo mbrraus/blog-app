@@ -22,7 +22,7 @@ class _HomeMainState extends State<HomeMain> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(()=> Scaffold(
         bottomNavigationBar: NavigationBar(
           backgroundColor: Colors.indigo.shade50,
           height: 75,
@@ -31,7 +31,9 @@ class _HomeMainState extends State<HomeMain> {
               //selectedindex 2 ise
               Get.toNamed('/login');
             } else {
+              print('destination selected');
               currentPageIndex.value = index;
+              print('current page index: $currentPageIndex');
             }
           },
           indicatorColor: Colors.indigo.shade200,
@@ -54,6 +56,7 @@ class _HomeMainState extends State<HomeMain> {
             ),
           ],
         ),
-        body: _pages[currentPageIndex.value]);
+        body: _pages[currentPageIndex.value]
+    ));
   }
 }
