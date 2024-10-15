@@ -1,11 +1,13 @@
 import 'package:blog_app/auth/auth_service.dart';
+import 'package:blog_app/auth/shared_prefs.dart';
 import 'package:blog_app/auth/signup_screen.dart';
-import 'package:blog_app/pages/home_main.dart';
 import 'package:blog_app/repository/user_repository.dart';
 import 'package:blog_app/utils/constants.dart';
 import 'package:blog_app/widgets/custom_tf.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../pages/editor/navbar_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,8 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Colors.indigo,
             icon: Icon(Icons.arrow_back_ios_new),
             onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => HomeMain()));
+              Get.back();
             },
           ),
         ),
@@ -84,8 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontSize: 12, color: Colors.black)),
                   GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => SignupScreen()));
+                       Get.toNamed('/signup');
                       },
                       child: Text('Sign up',
                           style: montserratBody.copyWith(
@@ -104,7 +104,19 @@ class _LoginScreenState extends State<LoginScreen> {
       print('user logged in');
       final user = await userRepository.getUserById(firebaseUser.uid);
       if (user != null) {
-        Get.toNamed('/navbarAuth', arguments: user);
+        await SharedPrefs.saveUserInfo(
+          user.id,
+          user.name,
+          user.email,
+          user.role.toString(),
+        );
+
+        Get.offAll(() => NavbarAuth(
+          uid: user.id,
+          displayName: user.name,
+          email: user.email,
+          role: user.role.toString(),
+        ));
       }
     }
   }

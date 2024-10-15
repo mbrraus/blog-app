@@ -8,7 +8,7 @@ class Post {
   String author;
   DateTime createdAt;
   String category;
-  String imageUrl = '';
+  String imageUrl;
 
   Post(
       {this.id,
@@ -16,8 +16,7 @@ class Post {
       required this.text,
       required this.author,
       required this.category,
-      required this.createdAt,
-      required this.imageUrl});
+      required this.createdAt, required this.imageUrl});
 
   factory Post.fromMap(Map<String, dynamic> map, String id) {
     return Post(

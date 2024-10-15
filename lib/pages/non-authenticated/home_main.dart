@@ -2,7 +2,7 @@ import 'package:blog_app/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'home.dart';
+import '../home.dart';
 
 class HomeMain extends StatefulWidget {
   const HomeMain({super.key});
@@ -22,7 +22,7 @@ class _HomeMainState extends State<HomeMain> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(()=> Scaffold(
         bottomNavigationBar: NavigationBar(
           backgroundColor: Colors.indigo.shade50,
           height: 75,
@@ -54,6 +54,6 @@ class _HomeMainState extends State<HomeMain> {
             ),
           ],
         ),
-        body: _pages[currentPageIndex.value]);
+        body: _pages[currentPageIndex.value]));
   }
 }

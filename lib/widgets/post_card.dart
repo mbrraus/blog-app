@@ -17,6 +17,7 @@ class PostCard extends StatelessWidget {
         Get.toNamed('/details', arguments: post);
       },
       child: Card(
+        color: Colors.white,
         margin: const EdgeInsets.all(10),
         child: ListTile(
           contentPadding: const EdgeInsets.all(10),
@@ -36,7 +37,9 @@ class PostCard extends StatelessWidget {
                   const SizedBox(width: 10),
                   if (category == 'All')
                     Chip(
-                      side: BorderSide(color: Colors.grey.shade500),
+                      side: BorderSide(color: Colors.transparent),
+                      elevation: 0.5,
+                      shadowColor: Colors.grey,
                       label: Text(post.category,
                           style: montserratBody.copyWith(
                             color: Colors.white,
@@ -57,8 +60,10 @@ class PostCard extends StatelessWidget {
               const SizedBox(height: 10),
               Row(
                 children: [
+                  Icon(Icons.account_circle),
+                  SizedBox(width: 3),
                   Text(
-                    'by ${post.author}',
+                    post.author,
                     style: montserratBody.copyWith(fontSize: 13),
                   ),
                   const Spacer(),

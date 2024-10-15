@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../models/post.dart';
 
@@ -49,6 +52,32 @@ class PostRepository {
       await _postsCollection.doc(postId).update(post.toMap());
     } catch (e) {
       print('error updating post: $e');
+    }
+  }
+  Future<String> uploadImageToStorage(File imageFile) async {
+    try {
+      String fileName = 'posts/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
+      UploadTask uploadTask = storageRef.putFile(imageFile);
+
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      throw Exception('Failed to upload image: $e');
+    }
+  }
+
+  Future<void> addPostWithImage({
+    required Post post,
+    required File imageFile,
+  }) async {
+    try {
+      String imageUrl = await uploadImageToStorage(imageFile);
+      post.imageUrl = imageUrl;
+      await addPost(post);
+    } catch (e) {
+      print('Error adding post with image: $e');
     }
   }
 }
