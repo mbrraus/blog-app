@@ -1,4 +1,3 @@
-import 'package:blog_app/models/user.dart';
 import 'package:blog_app/pages/editor/create_post.dart';
 import 'package:blog_app/pages/home.dart';
 import 'package:flutter/material.dart';

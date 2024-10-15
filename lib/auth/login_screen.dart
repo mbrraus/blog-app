@@ -1,6 +1,5 @@
 import 'package:blog_app/auth/auth_service.dart';
 import 'package:blog_app/auth/shared_prefs.dart';
-import 'package:blog_app/auth/signup_screen.dart';
 import 'package:blog_app/repository/user_repository.dart';
 import 'package:blog_app/utils/constants.dart';
 import 'package:blog_app/widgets/custom_tf.dart';

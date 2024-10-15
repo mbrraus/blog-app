@@ -2,13 +2,11 @@ import 'package:blog_app/auth/auth_service.dart';
 import 'package:blog_app/auth/login_screen.dart';
 import 'package:blog_app/auth/shared_prefs.dart';
 import 'package:blog_app/models/user.dart';
-import 'package:blog_app/pages/home.dart';
 import 'package:blog_app/repository/user_repository.dart';
 import 'package:blog_app/utils/constants.dart';
 import 'package:blog_app/widgets/custom_tf.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../pages/editor/navbar_auth.dart';
 
