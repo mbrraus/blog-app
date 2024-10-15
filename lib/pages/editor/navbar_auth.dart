@@ -1,11 +1,16 @@
 import 'package:blog_app/models/user.dart';
+import 'package:blog_app/pages/editor/create_post.dart';
 import 'package:blog_app/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class NavbarAuth extends StatefulWidget {
+  final String uid;
+  final String displayName;
+  final String email;
+  final String role;
 
-  const NavbarAuth({super.key});
+  const NavbarAuth({super.key, required this.uid, required this.displayName, required this.email, required this.role});
 
   @override
   State<NavbarAuth> createState() => _NavbarAuthState();
@@ -35,36 +40,37 @@ class _NavbarAuthState extends State<NavbarAuth> {
         label: 'Profile'),
   ];
 
-  final User? currentUser = Get.arguments;
+  // final User? currentUser = Get.arguments;
 
   List<Widget> get _pages => <Widget>[
     Center(child: Text("That's for searching")),
     Center(child: Text("That's for saved posts")),
-    Home(currentUser: currentUser),
-    Center(child: Text("That's for adding post!")),
+    Home(userName: widget.displayName),
+    CreatePost(),
     Center(child: Text("That's for account settings")),
   ];
 
-  int currentPageIndex = 2; //varsayilan home
+  final RxInt currentPageIndex = 2.obs; //varsayilan home
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
+    return Obx(() => Scaffold(
       bottomNavigationBar: NavigationBar(
         destinations: destinations,
         backgroundColor: Colors.indigo.shade50,
         height: 75,
         onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
+          if(index == 3) {
+            Get.toNamed('/create');
+          } else {
+            currentPageIndex.value = index;
+          }
         },
         indicatorColor: Colors.indigo.shade200,
-        selectedIndex: currentPageIndex,
+        selectedIndex: currentPageIndex.value,
       ),
-      body: _pages[currentPageIndex],
-    );
+      body: _pages[currentPageIndex.value],
+    ));
   }
 
 }

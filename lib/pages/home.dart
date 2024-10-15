@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controller/post_controller.dart';
 import '../models/post.dart';
-import '../models/user.dart';
 import '../utils/constants.dart';
+import '../utils/globals.dart';
 import '../widgets/post_card.dart';
 
 class Home extends StatefulWidget {
-  final User? currentUser;
+  final String? userName;
 
-  const Home({super.key, this.currentUser});
+  const Home({super.key, this.userName = ''});
 
   @override
   State<Home> createState() => _HomeState();
@@ -17,15 +17,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Post> posts = [];
-
-  List<String> categories = [
-    'All',
-    'Philosophy',
-    'Literature',
-    'Science',
-    'Nature',
-    'Technology'
-  ];
 
   int currentPageIndex = 0;
 
@@ -64,7 +55,7 @@ class _HomeState extends State<Home> {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
                         textAlign: TextAlign.left,
-                        'Welcome ${widget.currentUser?.name ?? ''}!',
+                        'Welcome ${widget.userName}',
                         // Display user's name if available
                         style: montserratBody.copyWith(
                           fontSize: 18,
@@ -88,18 +79,23 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            body: GetBuilder<PostController>(builder: (controller) {
-              if (controller.posts.isEmpty) {
-                return Center(child: Text('No posts available!'));
-              } else {
-                return ListView.builder(
-                  itemCount: controller.displayedPosts.length,
-                  itemBuilder: (context, index) {
-                    final post = controller.displayedPosts[index];
-                    return PostCard(post: post, category: selectedCategory);
-                  },
-                );
-              }
-            })));
+            body: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: GetBuilder<PostController>(builder: (controller) {
+                if (controller.isLoading) {
+                  return Center(child: CircularProgressIndicator());
+                } else {
+                  return ListView.builder(
+                    itemCount: controller.displayedPosts.length,
+                    itemBuilder: (context, index) {
+                      final post = controller.displayedPosts[index];
+                      return PostCard(post: post, category: selectedCategory);
+                    },
+                  );
+                }
+              }),
+            )));
   }
 }
