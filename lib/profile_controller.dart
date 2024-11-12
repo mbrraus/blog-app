@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:blog_app/data/repositories/auth_repository.dart';
 import 'package:blog_app/data/repositories/user_repository.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';

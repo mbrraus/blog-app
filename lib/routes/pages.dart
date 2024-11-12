@@ -10,7 +10,6 @@ import 'package:blog_app/routes/routes.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
-import '../binding/home_binding.dart';
 import '../modules/splash_module/splash_controller.dart';
 
 class Pages {
