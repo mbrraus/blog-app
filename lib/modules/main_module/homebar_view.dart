@@ -1,28 +1,33 @@
-import 'package:blog_app/auth/login_screen.dart';
+import 'package:blog_app/modules/auth_module/login_view.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../home.dart';
 
-class HomeMain extends StatefulWidget {
-  const HomeMain({super.key});
+import '../home_module/home_view.dart';
+
+class HomeBar extends StatefulWidget {
+  const HomeBar({super.key});
 
   @override
-  State<HomeMain> createState() => _HomeMainState();
+  State<HomeBar> createState() => _HomeBarState();
 }
 
-class _HomeMainState extends State<HomeMain> {
+class _HomeBarState extends State<HomeBar> {
   final RxInt currentPageIndex = 1.obs;
-
-  final List<Widget> _pages = [
-    Center(child: Text("That's for searching")),
-    Home(),
-    LoginScreen(),
-  ];
+  List<Widget> get _pages => <Widget>[
+        Center(
+            child: GestureDetector(
+                onTap: () {
+                },
+                child: Text("see if there any signed in user"))),
+        Home(),
+        LoginScreen(),
+      ];
 
   @override
   Widget build(BuildContext context) {
-    return Obx(()=> Scaffold(
+    return Obx(() => Scaffold(
         bottomNavigationBar: NavigationBar(
           backgroundColor: Colors.indigo.shade50,
           height: 75,

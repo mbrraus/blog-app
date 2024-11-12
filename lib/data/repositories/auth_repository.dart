@@ -1,17 +1,31 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 
-class AuthService {
+class AuthRepository {
   final _firebaseAuth = FirebaseAuth.instance;
 
-  Future<User?> createUserWithEmailAndPassword(String email,
-      String password) async {
+  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
+
+  Future<void> signOut() async {
+    if (_firebaseAuth.currentUser != null) {
+      var userEmail = _firebaseAuth.currentUser?.email;
+      await _firebaseAuth.signOut();
+      print('user signed out: $userEmail');
+    } else {
+      print("there is no signed in user");
+    }
+  }
+
+  Future<User?> getCurrentUser() async {
+    return _firebaseAuth.currentUser;
+  }
+
+  Future<User?> createUserWithEmailAndPassword(
+      String email, String password) async {
     try {
       final cred = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
       return cred.user;
     } on FirebaseAuthException catch (e) {
-
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
@@ -23,8 +37,8 @@ class AuthService {
     return null;
   }
 
-  Future<User?> loginUserWithEmailAndPassword(String email,
-      String password) async {
+  Future<User?> loginUserWithEmailAndPassword(
+      String email, String password) async {
     try {
       final cred = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -35,7 +49,7 @@ class AuthService {
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
-    } catch(e) {
+    } catch (e) {
       print(e);
     }
     return null;

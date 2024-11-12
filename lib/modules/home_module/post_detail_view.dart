@@ -1,10 +1,10 @@
-import 'package:blog_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../models/post.dart';
+import '../../data/models/post.dart';
+import '../../globals/styles/text_styles.dart';
 
-class PostDetailPage extends StatelessWidget {
-  const PostDetailPage({super.key});
+class PostDetailView extends StatelessWidget {
+  const PostDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {

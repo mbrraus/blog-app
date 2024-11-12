@@ -1,5 +1,6 @@
-import 'package:blog_app/utils/constants.dart';
 import 'package:flutter/material.dart';
+
+import '../globals/styles/text_styles.dart';
 
 class CategoryCard extends StatelessWidget {
   final String category;

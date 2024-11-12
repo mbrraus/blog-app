@@ -1,21 +1,19 @@
-import 'package:blog_app/pages/editor/create_post.dart';
-import 'package:blog_app/pages/home.dart';
+import 'package:blog_app/modules/create_post_module/create_post_view.dart';
+import 'package:blog_app/user_profile.dart';
+import 'package:blog_app/modules/home_module/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class NavbarAuth extends StatefulWidget {
-  final String uid;
-  final String displayName;
-  final String email;
-  final String role;
 
-  const NavbarAuth({super.key, required this.uid, required this.displayName, required this.email, required this.role});
+class AuthBar extends StatefulWidget {
+
+  const AuthBar({super.key});
 
   @override
-  State<NavbarAuth> createState() => _NavbarAuthState();
+  State<AuthBar> createState() => _AuthBarState();
 }
 
-class _NavbarAuthState extends State<NavbarAuth> {
+class _AuthBarState extends State<AuthBar> {
   var destinations = <Widget>[
     NavigationDestination(
         selectedIcon: Icon(Icons.search),
@@ -39,17 +37,16 @@ class _NavbarAuthState extends State<NavbarAuth> {
         label: 'Profile'),
   ];
 
-  // final User? currentUser = Get.arguments;
-
   List<Widget> get _pages => <Widget>[
-    Center(child: Text("That's for searching")),
+    Center(child: GestureDetector(onTap: () {
+    },child: Text("see if there any signed in user"))),
     Center(child: Text("That's for saved posts")),
-    Home(userName: widget.displayName),
+    Home(),
     CreatePost(),
-    Center(child: Text("That's for account settings")),
+    UserProfile(),
   ];
 
-  final RxInt currentPageIndex = 2.obs; //varsayilan home
+  final RxInt currentPageIndex = 2.obs;
 
   @override
   Widget build(BuildContext context) {

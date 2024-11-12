@@ -1,12 +1,9 @@
-import 'package:blog_app/auth/auth_service.dart';
-import 'package:blog_app/auth/shared_prefs.dart';
-import 'package:blog_app/repository/user_repository.dart';
-import 'package:blog_app/utils/constants.dart';
+import 'package:blog_app/modules/auth_module/auth_controller.dart';
 import 'package:blog_app/widgets/custom_tf.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../pages/editor/navbar_auth.dart';
+import '../../globals/styles/text_styles.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,19 +15,19 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
-
-  final _authService = AuthService();
-  final userRepository = UserRepository();
+  final authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: AppBar(
+          backgroundColor: Colors.white,
           leading: IconButton(
             color: Colors.indigo,
             icon: Icon(Icons.arrow_back_ios_new),
             onPressed: () {
-              Get.back();
+              Get.toNamed('/');
             },
           ),
         ),
@@ -63,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: SizedBox(
                       height: 41,
                       child: ElevatedButton(
-                        onPressed: login,
+                        onPressed: () async {authController.login(email.text, password.text);},
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
@@ -96,27 +93,5 @@ class _LoginScreenState extends State<LoginScreen> {
         )));
   }
 
-  void login() async {
-    final firebaseUser = await _authService.loginUserWithEmailAndPassword(
-        email.text, password.text);
-    if (firebaseUser != null) {
-      print('user logged in');
-      final user = await userRepository.getUserById(firebaseUser.uid);
-      if (user != null) {
-        await SharedPrefs.saveUserInfo(
-          user.id,
-          user.name,
-          user.email,
-          user.role.toString(),
-        );
 
-        Get.offAll(() => NavbarAuth(
-          uid: user.id,
-          displayName: user.name,
-          email: user.email,
-          role: user.role.toString(),
-        ));
-      }
-    }
-  }
 }
