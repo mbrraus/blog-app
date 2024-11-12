@@ -1,14 +1,10 @@
-import 'package:blog_app/auth/auth_service.dart';
-import 'package:blog_app/auth/login_screen.dart';
-import 'package:blog_app/auth/shared_prefs.dart';
-import 'package:blog_app/models/user.dart';
-import 'package:blog_app/repository/user_repository.dart';
-import 'package:blog_app/utils/constants.dart';
+import 'package:blog_app/modules/auth_module/auth_controller.dart';
+import 'package:blog_app/modules/auth_module/login_view.dart';
 import 'package:blog_app/widgets/custom_tf.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../pages/editor/navbar_auth.dart';
+import '../../globals/styles/text_styles.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -24,12 +20,12 @@ class _LoginScreenState extends State<SignupScreen> {
   final TextEditingController password = TextEditingController();
   final TextEditingController confirmPassword = TextEditingController();
 
-  final _authService = AuthService();
-  final userRepository = UserRepository();
+  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
           child: Center(
         child: SingleChildScrollView(
@@ -81,7 +77,10 @@ class _LoginScreenState extends State<SignupScreen> {
                       child: SizedBox(
                         height: 41,
                         child: ElevatedButton(
-                          onPressed: signUp,
+                          onPressed: () async {
+                            authController.signup(email.text, password.text,
+                                name.text, surname.text);
+                          },
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15)),
@@ -116,29 +115,5 @@ class _LoginScreenState extends State<SignupScreen> {
         ),
       )),
     );
-  }
-
-  void signUp() async {
-    final firebaseUser = await _authService.createUserWithEmailAndPassword(
-        email.text, password.text);
-    if (firebaseUser != null) {
-      print('user created');
-      final user = User(
-          id: firebaseUser.uid,
-          name: name.text,
-          surname: surname.text,
-          email: firebaseUser.email!,
-          role: Role.editor);
-      await userRepository.addUser(user);
-      SharedPrefs.saveUserInfo(
-          user.id, user.name, user.email, user.role.toString());
-
-      Get.offAll(() => NavbarAuth(
-        uid: user.id,
-        displayName: user.name,
-        email: user.email,
-        role: user.role.toString(),
-      ));
-    }
   }
 }

@@ -1,10 +1,11 @@
-import 'package:blog_app/controller/post_controller.dart';
-import 'package:blog_app/models/post.dart';
-import 'package:blog_app/utils/globals.dart';
+import 'package:blog_app/modules/create_post_module/create_post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
+
+import '../../data/models/post.dart';
+import '../../globals/globals.dart';
 
 class PreviewPost extends StatefulWidget {
   final String title;
@@ -25,7 +26,7 @@ class PreviewPost extends StatefulWidget {
 
 class _PreviewPostState extends State<PreviewPost> {
 
-  final PostController postController = Get.find();
+  final CreatePostController postController = Get.find<CreatePostController>();
 
   @override
   Widget build(BuildContext context) {

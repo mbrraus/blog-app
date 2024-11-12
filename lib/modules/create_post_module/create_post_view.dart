@@ -1,10 +1,10 @@
-import 'package:blog_app/auth/shared_prefs.dart';
-import 'package:blog_app/controller/post_controller.dart';
-import 'package:blog_app/pages/editor/preview_post.dart';
-import 'package:blog_app/utils/constants.dart';
-import 'package:blog_app/utils/globals.dart';
+import 'package:blog_app/modules/create_post_module/create_post_controller.dart';
+import 'package:blog_app/modules/create_post_module/preview_post_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../globals/globals.dart';
+import '../../globals/styles/text_styles.dart';
 
 class CreatePost extends StatefulWidget {
   const CreatePost({super.key});
@@ -17,12 +17,10 @@ class _CreatePostState extends State<CreatePost> {
   TextEditingController title = TextEditingController();
   TextEditingController content = TextEditingController();
 
-  final PostController postController = Get.find();
+  final CreatePostController postController = Get.put(CreatePostController());
 
   @override
   Widget build(BuildContext context) {
-    var userInfo = SharedPrefs.getUserInfo();
-    String displayName = userInfo['displayName'];
 
     return GestureDetector(
       onTap: () {
@@ -36,7 +34,7 @@ class _CreatePostState extends State<CreatePost> {
           actions: [
             Container(
                 padding: EdgeInsets.only(right: 20),
-                child: nextButton(displayName))
+                child: nextButton('sevval'))
           ],
           toolbarHeight: 40,
         ),

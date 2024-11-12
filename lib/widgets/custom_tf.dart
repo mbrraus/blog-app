@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utils/constants.dart';
+import '../globals/styles/text_styles.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hint;

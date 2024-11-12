@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:blog_app/models/user.dart' as appUser;
+import 'package:blog_app/data/models/user.dart' as appUser;
+
+import 'auth_repository.dart';
 
 class UserRepository {
+  final authRepository = AuthRepository();
   final CollectionReference _usersCollection =
   FirebaseFirestore.instance.collection('users');
 
@@ -13,6 +16,7 @@ class UserRepository {
       try{
         DocumentSnapshot userDoc = await _usersCollection.doc(uid).get();
         if(userDoc.exists) {
+          print('user exists');
           return appUser.User.fromMap(userDoc.data() as Map<String,dynamic>, uid);
         }
       } catch (e) {

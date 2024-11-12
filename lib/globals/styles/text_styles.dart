@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 TextStyle montserratHeader = const TextStyle(
@@ -31,6 +33,17 @@ TextStyle montserratAuth = const TextStyle(
     FontVariation('wght', 500),
     FontVariation('ital', 1),
     FontVariation('wght', 500)
+  ],
+);
+TextStyle montserratButton = const TextStyle(
+  fontFamily: 'Montserrat',
+  fontSize: 15,
+  color: Colors.black,
+  fontVariations: [
+    FontVariation('ital', 0),
+    FontVariation('wght', 470),
+    FontVariation('ital', 1),
+    FontVariation('wght', 470)
   ],
 );
 TextStyle montserratHint = const TextStyle(
@@ -78,9 +91,3 @@ TextStyle homePostTitle = const TextStyle(
     FontVariation('wght', 600)
   ],
 );
-
-
-//colors
-const Color background = Color(0xFFF3E7DC);
-const Color welcomeText = Color(0xffEAAFB8);
-
