@@ -14,4 +14,4 @@ Widget sizedBox20() {
   return SizedBox(height: 20);
 }
 DateTime now = DateTime.now();
-const int delayForSplashScreen = 700;
+const int delayForSplashScreen = 1700;

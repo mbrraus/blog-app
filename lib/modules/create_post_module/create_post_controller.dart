@@ -1,31 +1,56 @@
 import 'dart:io';
+import 'package:blog_app/data/repositories/user_repository.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../data/models/post.dart';
+import '../../data/models/user.dart';
 import '../../data/repositories/post_repository.dart';
+import '../../globals/globals.dart';
 
 class CreatePostController extends GetxController {
-  final PostRepository postRepository = PostRepository();
+  final post = Post.empty().obs;
 
-  RxBool isUploading = false.obs;
+  final postRepository = PostRepository();
+  final userRepository = UserRepository();
 
-  late Rx<XFile?> imageFile = Rxn<XFile>();
-  final ImagePicker _picker = ImagePicker();
+  @override
+  void onInit() {
+    getCurrentUser();
+    super.onInit();
+  }
+  var currentUser = User(id: '', name: '', surname: '', email: '');
+  void getCurrentUser() async {
+    currentUser = (await userRepository.getCurrentUser())!;
+  }
 
-  RxList selectedCategories = [].obs;
+  final isUploading = false.obs;
+  var isEditing = false;
+
+  Rxn<XFile>? imageFile = Rxn<XFile>();
+  final _picker = ImagePicker();
 
   Future<void> pickImage() async {
     try {
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-      imageFile.value = pickedFile;
+      imageFile!.value = pickedFile;
       print('image loaded');
     } catch (e) {
       print('there is a problem: $e');
     }
   }
 
-  Future<void> uploadPost(Post post, XFile? imageFile) async {
+  Future<void> uploadPost(XFile? imageFile) async {
+    Post newPost = Post(
+        id: '',
+        title: post.value.title,
+        text: post.value.text,
+        author: currentUser.name,
+        category: post.value.category,
+        createdAt: now,
+        imageUrl: '',
+        authorUid: currentUser.id);
+
     isUploading.value = true;
     if (imageFile == null) {
       isUploading.value = false;
@@ -34,7 +59,7 @@ class CreatePostController extends GetxController {
     }
     try {
       await postRepository.addPostWithImage(
-          post: post, imageFile: File(imageFile.path));
+          post: newPost, imageFile: File(imageFile.path));
       Get.offAllNamed('/navbarAuth');
     } catch (e) {
       Get.snackbar('Error', 'error uploading post');
@@ -43,11 +68,35 @@ class CreatePostController extends GetxController {
     }
   }
 
+  Future<void> updatePost() async {
+    Post updatedPost = Post(
+        id: post.value.id,
+        title: post.value.title,
+        text: post.value.text,
+        author: post.value.author,
+        category: post.value.category,
+        createdAt: post.value.createdAt,
+        updatedAt: now,
+        imageUrl: '',
+        authorUid: post.value.authorUid);
+    await postRepository.updatePost(updatedPost,
+        imageFile?.value != null ? File(imageFile!.value!.path) : null);
+  }
+
   void selectCategory(bool selected, String category) {
     if (selected) {
-      selectedCategories.add(category);
+      post.value.category = category;
     } else {
-      selectedCategories.remove(category);
+      post.value.category = '';
     }
   }
+
+  void closeUnsaved() {
+    print(post.value.id);
+    post.value = Post.empty();
+    imageFile?.value = null;
+    Get.delete<CreatePostController>();
+  }
+
+
 }

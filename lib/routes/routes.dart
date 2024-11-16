@@ -7,5 +7,6 @@ class Routes {
   static const createPage = '/create';
   static const previewPage = '/preview';
   static const splashScreen = '/splash';
+  static const profilePage = '/profile';
 
 }

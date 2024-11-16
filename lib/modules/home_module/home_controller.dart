@@ -26,6 +26,7 @@ class HomeController extends GetxController {
         isLoading = false;
         displayedPosts = posts
             .map((post) => post.copyWith(
+          id: post.id,
                 title: post.title,
                 text: post.text,
                 author: post.author,
@@ -43,7 +44,7 @@ class HomeController extends GetxController {
   void getFilteredPosts() {
     if (selectedCategory.value == 'All') {
       displayedPosts = posts
-          .map((post) => post.copyWith(
+          .map((post) => post.copyWith(id: post.id,
               title: post.title,
               text: post.text,
               author: post.author,
@@ -57,7 +58,6 @@ class HomeController extends GetxController {
           .where((post) => post.category == selectedCategory.value)
           .toList();
       filteredPosts = List.from(displayedPosts);
-      //memoryde olusuyor mu ? ? ? ?
       print('posts filtered');
     }
     update();

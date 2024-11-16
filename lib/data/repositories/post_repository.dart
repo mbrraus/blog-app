@@ -1,23 +1,29 @@
 import 'dart:io';
 
+import 'package:blog_app/data/repositories/auth_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get/get.dart';
 
+import '../../modules/create_post_module/create_post_controller.dart';
+import '../../modules/profile_module/profile_controller.dart';
+import '../../routes/routes.dart';
 import '../models/post.dart';
 
 class PostRepository {
   final CollectionReference _postsCollection =
       FirebaseFirestore.instance.collection('posts');
+  final authRepository = AuthRepository();
 
   Future<List<Post>> getAllPosts() async {
     try {
       QuerySnapshot querySnapshot = await _postsCollection.get();
       var postList = querySnapshot.docs
-          .map((doc) => Post.fromMap(doc.data() as Map<String, dynamic>, doc.id))
+          .map(
+              (doc) => Post.fromMap(doc.data() as Map<String, dynamic>, doc.id))
           .toList();
       // Future.delayed(const Duration(seconds: 30));
       return postList;
-
     } catch (e) {
       print("Error fetching posts: $e");
       return [];
@@ -47,13 +53,28 @@ class PostRepository {
     }
   }
 
-  Future<void> updatePost(String postId, Post post) async {
+  Future<void> updatePost(Post post, File? imageFile) async {
     try {
-      await _postsCollection.doc(postId).update(post.toMap());
+      var currentUser = await authRepository.getCurrentUser();
+      if (imageFile != null) {
+        String imageUrl = await uploadImageToStorage(imageFile);
+        post.imageUrl = imageUrl;
+      } //eskisini sileyecek miyiz
+      if (post.authorUid == currentUser?.uid) {
+        await _postsCollection.doc(post.id).update(post.toMap());
+        Get.find<ProfileController>().getUserPosts();
+        Get.snackbar('Successful', 'Post successfully updated.');
+        Get.delete<CreatePostController>();
+      } else {
+        Get.snackbar('Unauthorized', 'You are not allowed to edit this post.');
+      }
+
+      Get.toNamed(Routes.profilePage);
     } catch (e) {
       print('error updating post: $e');
     }
   }
+
   Future<String> uploadImageToStorage(File imageFile) async {
     try {
       String fileName = 'posts/${DateTime.now().millisecondsSinceEpoch}.jpg';
@@ -78,6 +99,20 @@ class PostRepository {
       await addPost(post);
     } catch (e) {
       print('Error adding post with image: $e');
+    }
+  }
+
+  Future<List<Post>> getPostsByUser(String userId) async {
+    try {
+      QuerySnapshot querySnapshot =
+          await _postsCollection.where('authorUid', isEqualTo: userId).get();
+      return querySnapshot.docs
+          .map(
+              (doc) => Post.fromMap(doc.data() as Map<String, dynamic>, doc.id))
+          .toList();
+    } catch (e) {
+      print('error fetching user posts: $e');
+      return [];
     }
   }
 }

@@ -4,29 +4,12 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 
-import '../../data/models/post.dart';
 import '../../globals/globals.dart';
 
-class PreviewPost extends StatefulWidget {
-  final String title;
-  final String content;
-  final String author;
-  final String selectedCategory;
-
-  const PreviewPost(
-      {super.key,
-        required this.title,
-        required this.content,
-        required this.author,
-        required this.selectedCategory});
-
-  @override
-  State<PreviewPost> createState() => _PreviewPostState();
-}
-
-class _PreviewPostState extends State<PreviewPost> {
-
+class PreviewPost extends StatelessWidget {
   final CreatePostController postController = Get.find<CreatePostController>();
+
+  PreviewPost({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,34 +19,33 @@ class _PreviewPostState extends State<PreviewPost> {
           return postController.isUploading.value
               ? Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _imagePicker(),
-                sizedBox20(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: postInfo()
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _imagePicker(),
+                      sizedBox20(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: postInfo()),
+                      ),
+                      sizedBox20(),
+                      // Content
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          postController.post.value.text,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      sizedBox20()
+                    ],
                   ),
-                ),
-                sizedBox20(),
-                // Content
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    widget.content,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                sizedBox20()
-              ],
-            ),
-          );
+                );
         }),
       ),
     );
@@ -75,54 +57,80 @@ class _PreviewPostState extends State<PreviewPost> {
         SizedBox(
           width: double.infinity,
           height: 250,
-          child: postController.imageFile.value == null
+          child: postController.isEditing &&
+                  postController.post.value.imageUrl.isNotEmpty
               ? GestureDetector(
-            onTap: postController.pickImage,
-            child: Container(
-              color: Colors.grey.shade300,
-              child: Center(
-                child: Icon(
-                  Icons.add_photo_alternate_outlined,
-                  size: 50,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          )
-              : Image.file(
-            File(postController.imageFile.value?.path ?? ''),
-            fit: BoxFit.cover,
-          ),
+                  onTap: postController.pickImage,
+                  child: postController.imageFile?.value != null
+                      ? Image.file(
+                          File(postController.imageFile?.value?.path ?? ''),
+                          fit: BoxFit.cover,
+                        )
+                      : Image.network(postController.post.value.imageUrl,
+                          fit: BoxFit.cover))
+              : postController.imageFile?.value == null
+                  ? GestureDetector(
+                      onTap: postController.pickImage,
+                      child: Container(
+                        color: Colors.grey.shade300,
+                        child: Center(
+                          child: Icon(
+                            Icons.add_photo_alternate_outlined,
+                            size: 50,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    )
+                  : GestureDetector(
+                      onTap: postController.pickImage,
+                      child: Image.file(
+                        File(postController.imageFile?.value?.path ?? ''),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
         ),
         goBackCircled(),
         Positioned(
             top: 16,
             right: 16,
-            child: ElevatedButton(
-                onPressed: () {
-                  Post newPost = Post(
-                      title: widget.title,
-                      text: widget.content,
-                      author: widget.author,
-                      category: widget.selectedCategory,
-                      createdAt: now,
-                      imageUrl: '');
-                  postController.uploadPost(newPost, postController.imageFile.value);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.indigo.shade600,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 5, vertical: 3),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(17),
-                  ),
-                ),
-                child: Text('Post',
-                    style: TextStyle(
-                        fontSize: 16, color: Colors.white)))),
+            child: postController.isEditing ? updateButton() : postButton()),
       ],
     );
   }
+
+  Widget postButton() {
+    return ElevatedButton(
+        onPressed: () {
+          postController.uploadPost(postController.imageFile?.value);
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.indigo.shade600,
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(17),
+          ),
+        ),
+        child:
+            Text('Post', style: TextStyle(fontSize: 16, color: Colors.white)));
+  }
+
+  Widget updateButton() {
+    return ElevatedButton(
+        onPressed: () {
+          postController.updatePost();
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.indigo.shade600,
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(17),
+          ),
+        ),
+        child:
+            Text('Save', style: TextStyle(fontSize: 16, color: Colors.white)));
+  }
+
   Widget goBackCircled() {
     return Positioned(
       top: 16,
@@ -142,21 +150,21 @@ class _PreviewPostState extends State<PreviewPost> {
       ),
     );
   }
+
   List<Widget> postInfo() {
     return [
       Row(
         children: [
           Icon(Icons.account_circle),
           SizedBox(width: 5),
-          Text(widget.author,
-              style: TextStyle(fontSize: 16)),
+          Text('${postController.currentUser.name} ${postController.currentUser.surname}',
+              style: TextStyle( fontSize: 16)),
         ],
       ),
       Text(
-        DateFormat('dd.MM.yyyy').format(now),
+        DateFormat('dd.MM.yyyy').format(postController.post.value.createdAt),
         style: TextStyle(fontSize: 14),
       ),
     ];
   }
 }
-
