@@ -42,12 +42,15 @@ class AuthRepository {
     try {
       final cred = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+      print('were here');
       return cred.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
+      } else {
+        print('something went wrong');
       }
     } catch (e) {
       print(e);

@@ -7,6 +7,7 @@ import '../../data/models/post.dart';
 import '../../data/models/user.dart';
 import '../../data/repositories/post_repository.dart';
 import '../../globals/globals.dart';
+import '../profile_module/profile_controller.dart';
 
 class CreatePostController extends GetxController {
   final post = Post.empty().obs;
@@ -19,7 +20,9 @@ class CreatePostController extends GetxController {
     getCurrentUser();
     super.onInit();
   }
+
   var currentUser = User(id: '', name: '', surname: '', email: '');
+
   void getCurrentUser() async {
     currentUser = (await userRepository.getCurrentUser())!;
   }
@@ -38,6 +41,13 @@ class CreatePostController extends GetxController {
     } catch (e) {
       print('there is a problem: $e');
     }
+  }
+
+  void deletePost(Post post) async {
+    postRepository.deletePost(post);
+    Get.back();
+    Get.snackbar('Success', 'Post successfully deleted.');
+    Get.find<ProfileController>().getUserPosts();
   }
 
   Future<void> uploadPost(XFile? imageFile) async {
@@ -65,6 +75,7 @@ class CreatePostController extends GetxController {
       Get.snackbar('Error', 'error uploading post');
     } finally {
       isUploading.value = false;
+
     }
   }
 
@@ -97,6 +108,4 @@ class CreatePostController extends GetxController {
     imageFile?.value = null;
     Get.delete<CreatePostController>();
   }
-
-
 }

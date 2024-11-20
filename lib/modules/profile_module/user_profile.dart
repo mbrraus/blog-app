@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../globals/styles/text_styles.dart';
+import '../create_post_module/create_post_controller.dart';
 
 class UserProfile extends StatefulWidget {
-  const UserProfile({super.key});
+   UserProfile({super.key}) {
+    Get.lazyPut(() => CreatePostController());
+  }
 
   @override
   State<UserProfile> createState() => _UserProfileState();
