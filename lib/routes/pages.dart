@@ -1,5 +1,6 @@
 import 'package:blog_app/modules/auth_module/login_view.dart';
 import 'package:blog_app/modules/auth_module/signup_view.dart';
+import 'package:blog_app/modules/create_post_module/create_post_controller.dart';
 import 'package:blog_app/modules/create_post_module/create_post_view.dart';
 import 'package:blog_app/modules/create_post_module/preview_post_view.dart';
 import 'package:blog_app/modules/home_module/post_detail_view.dart';
@@ -20,6 +21,7 @@ class Pages {
         page: () => UserProfile(),
         binding: BindingsBuilder(() {
           Get.put(ProfileController());
+          Get.put(CreatePostController());
         })),
     GetPage(
         name: Routes.splashScreen,
@@ -41,9 +43,7 @@ class Pages {
     ),
     GetPage(
       name: Routes.previewPage,
-      page: () => PreviewPost(
-
-      ),
+      page: () => PreviewPost(),
     ),
   ];
 }

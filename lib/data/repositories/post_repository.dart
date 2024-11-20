@@ -15,6 +15,18 @@ class PostRepository {
       FirebaseFirestore.instance.collection('posts');
   final authRepository = AuthRepository();
 
+  void deletePost(Post post) async {
+    try {
+      var currentUser = await authRepository.getCurrentUser();
+      if (post.authorUid == currentUser?.uid) {
+        await _postsCollection.doc(post.id).delete();
+      }
+    } catch (e) {
+      print('Error deleting post: $e');
+      Get.snackbar('Error', 'Failed to delete post.');
+    }
+  }
+
   Future<List<Post>> getAllPosts() async {
     try {
       QuerySnapshot querySnapshot = await _postsCollection.get();
@@ -22,7 +34,6 @@ class PostRepository {
           .map(
               (doc) => Post.fromMap(doc.data() as Map<String, dynamic>, doc.id))
           .toList();
-      // Future.delayed(const Duration(seconds: 30));
       return postList;
     } catch (e) {
       print("Error fetching posts: $e");
@@ -32,15 +43,14 @@ class PostRepository {
 
   Future<Post?> getPostById(String postId) async {
     try {
-      DocumentSnapshot doc = await _postsCollection.doc(postId).get();
+      var doc = await _postsCollection.doc(postId).get();
       if (doc.exists) {
         return Post.fromMap(doc.data() as Map<String, dynamic>, postId);
       }
-      return null;
     } catch (e) {
       print("error fetching post: $e");
-      return null;
     }
+    return null;
   }
 
   Future<void> addPost(Post post) async {

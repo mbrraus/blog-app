@@ -9,7 +9,7 @@ import '../../routes/routes.dart';
 
 class CreatePost extends StatelessWidget {
   final CreatePostController postController = Get.put(CreatePostController(),permanent: false);
-  late TextEditingController title = TextEditingController();
+  final TextEditingController title = TextEditingController(); // !!!!!
   final TextEditingController content = TextEditingController();
 
   CreatePost({
@@ -80,12 +80,9 @@ class CreatePost extends StatelessWidget {
                           selected:
                               postController.post.value.category == category,
                           onSelected: (bool selected) {
-                            print(selected);
                             if (selected) {
-                              print('if');
                               postController.post.update((post) {
                                 post?.category = category;
-                                print(category);
                               });
                             }
                           },
