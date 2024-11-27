@@ -1,16 +1,15 @@
 import 'package:blog_app/modules/auth_module/auth_controller.dart';
-import 'package:blog_app/modules/create_post_module/create_post_view.dart';
 import 'package:blog_app/modules/profile_module/profile_controller.dart';
 import 'package:blog_app/modules/profile_module/profile_post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../globals/styles/text_styles.dart';
-import '../create_post_module/create_post_controller.dart';
+import '../post_module/post_controller.dart';
 
 class UserProfile extends StatefulWidget {
    UserProfile({super.key}) {
-    Get.put(CreatePostController());
+    Get.put(PostController());
     // Get.put(ProfileController());
   }
 
@@ -22,7 +21,7 @@ class _UserProfileState extends State<UserProfile>
     with AutomaticKeepAliveClientMixin {
   final authController = AuthController();
   final profileController = Get.find<ProfileController>();
-  final postController = Get.find<CreatePostController>();
+  final postController = Get.find<PostController>();
 
 
   @override

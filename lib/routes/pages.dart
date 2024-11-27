@@ -1,8 +1,5 @@
 import 'package:blog_app/modules/auth_module/login_view.dart';
 import 'package:blog_app/modules/auth_module/signup_view.dart';
-import 'package:blog_app/modules/create_post_module/create_post_controller.dart';
-import 'package:blog_app/modules/create_post_module/create_post_view.dart';
-import 'package:blog_app/modules/create_post_module/preview_post_view.dart';
 import 'package:blog_app/modules/home_module/post_detail_view.dart';
 import 'package:blog_app/modules/main_module/homebar_view.dart';
 import 'package:blog_app/modules/main_module/authbar_view.dart';
@@ -11,6 +8,9 @@ import 'package:blog_app/modules/splash_module/splash_screen.dart';
 import 'package:blog_app/routes/routes.dart';
 import 'package:get/get.dart';
 
+import '../modules/post_module/create_post_view.dart';
+import '../modules/post_module/post_controller.dart';
+import '../modules/post_module/preview_post_view.dart';
 import '../modules/profile_module/profile_controller.dart';
 import '../modules/splash_module/splash_controller.dart';
 
@@ -21,7 +21,7 @@ class Pages {
         page: () => UserProfile(),
         binding: BindingsBuilder(() {
            Get.put(ProfileController());
-          Get.put(CreatePostController());
+          Get.put(PostController());
         })),
     GetPage(
         name: Routes.splashScreen,

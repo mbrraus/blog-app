@@ -1,4 +1,4 @@
-import 'package:blog_app/modules/create_post_module/create_post_controller.dart';
+import 'package:blog_app/modules/post_module/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,7 +8,7 @@ import '../../globals/styles/text_styles.dart';
 import '../../routes/routes.dart';
 
 class CreatePost extends StatelessWidget {
-  final CreatePostController postController = Get.put(CreatePostController(),permanent: false);
+  final PostController postController = Get.put(PostController(),permanent: false);
   final TextEditingController title = TextEditingController(); // !!!!!
   final TextEditingController content = TextEditingController();
 

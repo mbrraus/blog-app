@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../../globals/globals.dart';
 import '../../globals/styles/text_styles.dart';
 import '../../widgets/post_card.dart';
-import '../create_post_module/create_post_controller.dart';
+import '../post_module/post_controller.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final HomeController homeController = Get.put(HomeController());
-  final CreatePostController postController = Get.find<CreatePostController>();
+  final PostController postController = Get.find<PostController>();
 
   @override
   void initState() {

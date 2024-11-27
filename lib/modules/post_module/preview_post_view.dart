@@ -1,4 +1,4 @@
-import 'package:blog_app/modules/create_post_module/create_post_controller.dart';
+import 'package:blog_app/modules/post_module/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +8,7 @@ import '../../globals/globals.dart';
 import '../../routes/routes.dart';
 
 class PreviewPost extends StatelessWidget {
-  final CreatePostController postController = Get.find<CreatePostController>();
+  final PostController postController = Get.find<PostController>();
 
   PreviewPost({super.key});
 
@@ -50,51 +50,55 @@ class PreviewPost extends StatelessWidget {
   }
 
   Widget _imagePicker() {
-    return Stack(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          height: 250,
-          child: postController.isEditing &&
-                  postController.post.value.imageUrl.isNotEmpty
-              ? GestureDetector(
-                  onTap: postController.pickImage,
-                  child: postController.imageFile?.value != null
-                      ? Image.file(
-                          File(postController.imageFile?.value?.path ?? ''),
-                          fit: BoxFit.cover,
-                        )
-                      : Image.network(postController.post.value.imageUrl,
-                          fit: BoxFit.cover))
-              : postController.imageFile?.value == null
-                  ? GestureDetector(
-                      onTap: postController.pickImage,
-                      child: Container(
-                        color: Colors.grey.shade300,
-                        child: Center(
-                          child: Icon(
-                            Icons.add_photo_alternate_outlined,
-                            size: 50,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                    )
-                  : GestureDetector(
-                      onTap: postController.pickImage,
-                      child: Image.file(
-                        File(postController.imageFile?.value?.path ?? ''),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-        ),
-        goBackCircled(),
-        Positioned(
+    return Obx(
+          () => Stack(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            height: 250,
+            child: postController.isEditing &&
+                postController.post.value.imageUrl.isNotEmpty
+                ? GestureDetector(
+                onTap: postController.pickImage,
+                child: postController.imageFile?.value != null
+                    ? Image.file(
+                  File(postController.imageFile?.value?.path ?? ''),
+                  fit: BoxFit.cover,
+                )
+                    : Image.network(postController.post.value.imageUrl,
+                    fit: BoxFit.cover))
+                : postController.imageFile?.value == null
+                ? GestureDetector(
+              onTap: postController.pickImage,
+              child: Container(
+                color: Colors.grey.shade300,
+                child: Center(
+                  child: Icon(
+                    Icons.add_photo_alternate_outlined,
+                    size: 50,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            )
+                : GestureDetector(
+              onTap: postController.pickImage,
+              child: Image.file(
+                File(postController.imageFile?.value?.path ?? ''),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          goBackCircled(),
+          Positioned(
             top: 16,
             right: 16,
-            child: postController.isEditing ? updateButton() : postButton()),
-      ],
+            child: postController.isEditing ? updateButton() : postButton(),
+          ),
+        ],
+      ),
     );
+
   }
 
   Widget postButton() {
