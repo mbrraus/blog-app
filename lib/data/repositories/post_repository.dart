@@ -69,17 +69,12 @@ class PostRepository {
       if (imageFile != null) {
         String imageUrl = await uploadImageToStorage(imageFile);
         post.imageUrl = imageUrl;
-      } //eskisini sileyecek miyiz
+      }
       if (post.authorUid == currentUser?.uid) {
         await _postsCollection.doc(post.id).update(post.toMap());
-        Get.find<ProfileController>().getUserPosts();
-        Get.snackbar('Successful', 'Post successfully updated.');
-        Get.delete<CreatePostController>();
       } else {
         Get.snackbar('Unauthorized', 'You are not allowed to edit this post.');
       }
-
-      Get.toNamed(Routes.profilePage);
     } catch (e) {
       print('error updating post: $e');
     }

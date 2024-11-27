@@ -7,6 +7,8 @@ import '../../data/models/post.dart';
 import '../../data/models/user.dart';
 import '../../data/repositories/post_repository.dart';
 import '../../globals/globals.dart';
+import '../../routes/routes.dart';
+import '../home_module/home_controller.dart';
 import '../profile_module/profile_controller.dart';
 
 class CreatePostController extends GetxController {
@@ -70,12 +72,15 @@ class CreatePostController extends GetxController {
     try {
       await postRepository.addPostWithImage(
           post: newPost, imageFile: File(imageFile.path));
-      Get.offAllNamed('/navbarAuth');
+      Get.find<HomeController>().loadPosts();
+      Get.find<ProfileController>().getUserPosts();
+
+
     } catch (e) {
       Get.snackbar('Error', 'error uploading post');
     } finally {
       isUploading.value = false;
-
+      print('uploading done');
     }
   }
 
@@ -90,8 +95,18 @@ class CreatePostController extends GetxController {
         updatedAt: now,
         imageUrl: '',
         authorUid: post.value.authorUid);
-    await postRepository.updatePost(updatedPost,
-        imageFile?.value != null ? File(imageFile!.value!.path) : null);
+
+    isUploading.value = true;
+    try {
+      await postRepository.updatePost(updatedPost,
+          imageFile?.value != null ? File(imageFile!.value!.path) : null);
+      Get.find<ProfileController>().getUserPosts();
+      Get.snackbar('Successful', 'Post successfully updated.');
+    } catch (e) {
+      Get.snackbar('Error', 'error updating post');
+    } finally {
+      isUploading.value = false;
+    }
   }
 
   void selectCategory(bool selected, String category) {

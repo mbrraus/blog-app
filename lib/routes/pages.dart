@@ -6,12 +6,12 @@ import 'package:blog_app/modules/create_post_module/preview_post_view.dart';
 import 'package:blog_app/modules/home_module/post_detail_view.dart';
 import 'package:blog_app/modules/main_module/homebar_view.dart';
 import 'package:blog_app/modules/main_module/authbar_view.dart';
-import 'package:blog_app/modules/profile_module/profile_controller.dart';
 import 'package:blog_app/modules/profile_module/user_profile.dart';
 import 'package:blog_app/modules/splash_module/splash_screen.dart';
 import 'package:blog_app/routes/routes.dart';
 import 'package:get/get.dart';
 
+import '../modules/profile_module/profile_controller.dart';
 import '../modules/splash_module/splash_controller.dart';
 
 class Pages {
@@ -20,7 +20,7 @@ class Pages {
         name: Routes.profilePage,
         page: () => UserProfile(),
         binding: BindingsBuilder(() {
-          Get.put(ProfileController());
+           Get.put(ProfileController());
           Get.put(CreatePostController());
         })),
     GetPage(
