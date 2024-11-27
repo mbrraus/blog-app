@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'dart:io';
 
 import '../../globals/globals.dart';
+import '../../routes/routes.dart';
 
 class PreviewPost extends StatelessWidget {
   final CreatePostController postController = Get.find<CreatePostController>();
@@ -16,36 +17,33 @@ class PreviewPost extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Obx(() {
-          return postController.isUploading.value
-              ? Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _imagePicker(),
-                      sizedBox20(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: postInfo()),
-                      ),
-                      sizedBox20(),
-                      // Content
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Text(
-                          postController.post.value.text,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      sizedBox20()
-                    ],
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _imagePicker(),
+                sizedBox20(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: postInfo()),
+                ),
+                sizedBox20(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    postController.post.value.text,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
                   ),
-                );
+                ),
+                sizedBox20()
+              ],
+            ),
+          );
         }),
       ),
     );
@@ -101,8 +99,10 @@ class PreviewPost extends StatelessWidget {
 
   Widget postButton() {
     return ElevatedButton(
-        onPressed: () {
+        onPressed: ()  {
           postController.uploadPost(postController.imageFile?.value);
+          Get.offAllNamed(Routes.authHomePage);
+
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.indigo.shade600,
@@ -119,6 +119,8 @@ class PreviewPost extends StatelessWidget {
     return ElevatedButton(
         onPressed: () {
           postController.updatePost();
+          Get.offAllNamed(Routes.authHomePage, arguments: 4);
+
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.indigo.shade600,
@@ -157,8 +159,9 @@ class PreviewPost extends StatelessWidget {
         children: [
           Icon(Icons.account_circle),
           SizedBox(width: 5),
-          Text('${postController.currentUser.name} ${postController.currentUser.surname}',
-              style: TextStyle( fontSize: 16)),
+          Text(
+              '${postController.currentUser.name} ${postController.currentUser.surname}',
+              style: TextStyle(fontSize: 16)),
         ],
       ),
       Text(
