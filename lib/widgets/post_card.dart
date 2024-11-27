@@ -19,9 +19,9 @@ class PostCard extends StatelessWidget {
       child: Card(
         color: Colors.white,
         margin: const EdgeInsets.all(10),
-        child: ListTile(
-          contentPadding: const EdgeInsets.all(10),
-          subtitle: Column(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -31,7 +31,10 @@ class PostCard extends StatelessWidget {
                     child: Text(
                       post.title,
                       style: homePostTitle.copyWith(
-                          fontSize: 25, color: Colors.indigo),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.indigo,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -40,56 +43,98 @@ class PostCard extends StatelessWidget {
                       side: BorderSide(color: Colors.transparent),
                       elevation: 0.5,
                       shadowColor: Colors.grey,
-                      label: Text(post.category,
-                          style: montserratBody.copyWith(
-                            color: Colors.white,
-                            fontVariations: [
-                              const FontVariation('ital', 0),
-                              const FontVariation('wght', 450),
-                              const FontVariation('ital', 1),
-                              const FontVariation('wght', 450)
-                            ],
-                          )),
+                      label: Text(
+                        post.category,
+                        style: montserratBody.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                       backgroundColor:
                           getCategoryColor(post.category).withOpacity(0.5),
-                    )
+                    ),
                 ],
               ),
-              const SizedBox(height: 10),
-              if (post.imageUrl.isNotEmpty) Image.network(post.imageUrl),
-              const SizedBox(height: 10),
               Row(
                 children: [
-                  Icon(Icons.account_circle),
-                  SizedBox(width: 3),
+                  Icon(Icons.account_circle, size: 16, color: Colors.grey),
+                  const SizedBox(width: 3),
                   Text(
                     post.author,
-                    style: montserratBody.copyWith(fontSize: 13),
-                  ),
-                  const Spacer(),
-                  Text(post.formattedTime,
-                      style: montserratBody.copyWith(fontSize: 13)),
-                ],
-              ),
-              const SizedBox(height: 7),
-              Row(
-                children: [
-                  Flexible(
-                    child: Text(
-                      post.text,
-                      maxLines: 3,
-                      overflow: TextOverflow.fade,
-                      style: homePostText.copyWith(
-                          color: Colors.black, fontSize: 15),
+                    style: montserratBody.copyWith(
+                      fontSize: 12,
+                      color: Colors.black87,
                     ),
                   ),
-                  const Icon(Icons.navigate_next_rounded,
-                      size: 30, color: Colors.indigo),
+                ],
+              ),
+              const SizedBox(height: 10),
+              if (post.imageUrl.isNotEmpty)
+                _buildImageWithBottomFade(post.imageUrl),
+              const SizedBox(height: 10),
+              Text(
+                post.text,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: homePostText.copyWith(
+                  color: Colors.black87,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const Spacer(),
+                  Text(
+                    post.formattedTime,
+                    style: montserratBody.copyWith(
+                      fontSize: 12,
+                      color: Colors.black45,
+                    ),
+                  ),
                 ],
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildImageWithBottomFade(String imageUrl) {
+    return Container(
+      height: 200,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: Image.network(
+              imageUrl,
+              height: 200,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.grey.withOpacity(0.1),
+                    Colors.white,
+                  ],
+                  stops: [0.9, 1.0],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,5 +1,4 @@
 import 'package:blog_app/globals/styles/text_styles.dart';
-import 'package:blog_app/modules/create_post_module/create_post_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_alert/flutter_platform_alert.dart';
@@ -7,10 +6,11 @@ import 'package:get/get.dart';
 
 import '../../data/models/post.dart';
 import '../../routes/routes.dart';
+import '../post_module/post_controller.dart';
 
 class ProfilePostCard extends StatelessWidget {
   final Post post;
-  final postController = Get.find<CreatePostController>();
+  final postController = Get.find<PostController>();
   ProfilePostCard({super.key, required this.post});
 
   @override

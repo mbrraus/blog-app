@@ -1,17 +1,18 @@
 import 'dart:io';
 import 'package:blog_app/data/repositories/user_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../data/models/post.dart';
 import '../../data/models/user.dart';
 import '../../data/repositories/post_repository.dart';
 import '../../globals/globals.dart';
-import '../../routes/routes.dart';
 import '../home_module/home_controller.dart';
 import '../profile_module/profile_controller.dart';
 
-class CreatePostController extends GetxController {
+class PostController extends GetxController {
   final post = Post.empty().obs;
 
   final postRepository = PostRepository();
@@ -39,9 +40,29 @@ class CreatePostController extends GetxController {
     try {
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
       imageFile!.value = pickedFile;
+      cropImage();
       print('image loaded');
     } catch (e) {
       print('there is a problem: $e');
+    }
+  }
+
+  void cropImage() async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: imageFile!.value!.path,
+      uiSettings: [
+        IOSUiSettings(
+          title: 'Cropper',
+          aspectRatioPresets: [
+            CropAspectRatioPreset.original,
+            CropAspectRatioPreset.square,
+            CropAspectRatioPreset.ratio7x5
+          ],
+        ),
+      ],
+    );
+    if (croppedFile != null) {
+      imageFile!.value = XFile(croppedFile.path);
     }
   }
 
@@ -74,13 +95,11 @@ class CreatePostController extends GetxController {
           post: newPost, imageFile: File(imageFile.path));
       Get.find<HomeController>().loadPosts();
       Get.find<ProfileController>().getUserPosts();
-
-
     } catch (e) {
       Get.snackbar('Error', 'error uploading post');
     } finally {
       isUploading.value = false;
-      print('uploading done');
+
     }
   }
 
@@ -121,6 +140,6 @@ class CreatePostController extends GetxController {
     print(post.value.id);
     post.value = Post.empty();
     imageFile?.value = null;
-    Get.delete<CreatePostController>();
+    Get.delete<PostController>();
   }
 }

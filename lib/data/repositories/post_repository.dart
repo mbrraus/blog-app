@@ -5,9 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
-import '../../modules/create_post_module/create_post_controller.dart';
-import '../../modules/profile_module/profile_controller.dart';
-import '../../routes/routes.dart';
 import '../models/post.dart';
 
 class PostRepository {
