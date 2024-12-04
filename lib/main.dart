@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'firebase_options.dart';
+import 'modules/home_module/home_controller.dart';
 import 'modules/main_module/main_controller.dart';
 
 void main() async {
@@ -27,6 +28,7 @@ class BlogApp extends StatelessWidget {
         title: 'Freely',
         initialRoute: Routes.splashScreen,
         initialBinding: BindingsBuilder(() {
+          Get.put(HomeController());
           Get.put(MainController());
         }),
         getPages: Pages.pages);

@@ -7,7 +7,7 @@ import 'package:blog_app/data/models/user.dart' as appUser;
 
 import '../../data/models/post.dart';
 
-class ProfileController extends GetxController{
+class ProfileController extends GetxController {
   final authRepository = AuthRepository();
   final userRepository = UserRepository();
   final postRepository = PostRepository();
@@ -15,6 +15,12 @@ class ProfileController extends GetxController{
   var fullName = ''.obs;
   var currentUser = Rxn<appUser.User>();
   var userPosts = <Post>[].obs;
+
+  final _isUpdating = false.obs;
+
+  bool get isUpdating => _isUpdating.value;
+
+  set isUpdating(value) => _isUpdating.value = value;
 
   @override
   void onInit() {
@@ -32,17 +38,22 @@ class ProfileController extends GetxController{
       }
     }
   }
+
   String getFullName() {
     if (currentUser.value != null) {
-      print('${currentUser.value?.name ?? ''} ${currentUser.value?.surname ?? ''}');
+      print(
+          '${currentUser.value?.name ?? ''} ${currentUser.value?.surname ?? ''}');
       return '${currentUser.value?.name ?? ''} ${currentUser.value?.surname ?? ''}';
     }
     return '';
   }
+
   Future<void> getUserPosts() async {
-    if(currentUser.value!=null) {
+    isUpdating = true;
+    if (currentUser.value != null) {
       final posts = await postRepository.getPostsByUser(currentUser.value!.id);
       userPosts.assignAll(posts);
     }
+    isUpdating = false;
   }
 }

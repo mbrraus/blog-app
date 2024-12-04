@@ -22,6 +22,17 @@ TextStyle montserratBody = const TextStyle(
   ],
 );
 
+TextStyle montserratTab = const TextStyle(
+  fontFamily: 'Montserrat',
+  fontSize: 15,
+  fontVariations: [
+    FontVariation('ital', 0),
+    FontVariation('wght', 550),
+    FontVariation('ital', 1),
+    FontVariation('wght', 550)
+  ],
+);
+
 TextStyle montserratAuth = const TextStyle(
   fontFamily: 'Montserrat',
   fontSize: 15,
@@ -84,8 +95,8 @@ TextStyle homePostTitle = const TextStyle(
   fontSize: 48,
   fontVariations: [
     FontVariation('ital', 0),
-    FontVariation('wght', 600),
+    FontVariation('wght', 650),
     FontVariation('ital', 1),
-    FontVariation('wght', 600)
+    FontVariation('wght', 650)
   ],
 );

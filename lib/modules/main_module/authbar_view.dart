@@ -28,7 +28,6 @@ class _AuthBarState extends State<AuthBar> {
     }
     super.initState();
   }
-
   var destinations = <Widget>[
     NavigationDestination(
         selectedIcon: Icon(Icons.search),
@@ -67,7 +66,7 @@ class _AuthBarState extends State<AuthBar> {
     return Obx(() => Scaffold(
           bottomNavigationBar: NavigationBar(
             destinations: destinations,
-            backgroundColor: Colors.indigo.shade50,
+            backgroundColor: Colors.white,
             height: 75,
             onDestinationSelected: (int index) {
               if (index == 3) {

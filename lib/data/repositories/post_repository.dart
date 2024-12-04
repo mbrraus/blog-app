@@ -26,7 +26,8 @@ class PostRepository {
 
   Future<List<Post>> getAllPosts() async {
     try {
-      QuerySnapshot querySnapshot = await _postsCollection.get();
+      QuerySnapshot querySnapshot =
+          await _postsCollection.orderBy('createdAt', descending: true).get();
       var postList = querySnapshot.docs
           .map(
               (doc) => Post.fromMap(doc.data() as Map<String, dynamic>, doc.id))
@@ -61,6 +62,7 @@ class PostRepository {
   }
 
   Future<void> updatePost(Post post, File? imageFile) async {
+
     try {
       var currentUser = await authRepository.getCurrentUser();
       if (imageFile != null) {
@@ -107,7 +109,7 @@ class PostRepository {
   Future<List<Post>> getPostsByUser(String userId) async {
     try {
       QuerySnapshot querySnapshot =
-          await _postsCollection.where('authorUid', isEqualTo: userId).get();
+          await _postsCollection.orderBy('createdAt',descending: true).where('authorUid', isEqualTo: userId).get();
       return querySnapshot.docs
           .map(
               (doc) => Post.fromMap(doc.data() as Map<String, dynamic>, doc.id))
@@ -115,6 +117,6 @@ class PostRepository {
     } catch (e) {
       print('error fetching user posts: $e');
       return [];
-    }
+     }
   }
 }
