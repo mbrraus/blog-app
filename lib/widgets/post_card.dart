@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../data/models/post.dart';
 import '../globals/styles/text_styles.dart';
+import '../routes/routes.dart';
 
 class PostCard extends StatelessWidget {
   final Post post;
@@ -20,41 +21,10 @@ class PostCard extends StatelessWidget {
         color: Colors.white,
         margin: const EdgeInsets.all(10),
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      post.title,
-                      style: homePostTitle.copyWith(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.indigo,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  if (category == 'All')
-                    Chip(
-                      side: BorderSide(color: Colors.transparent),
-                      elevation: 0.5,
-                      shadowColor: Colors.grey,
-                      label: Text(
-                        post.category,
-                        style: montserratBody.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      backgroundColor:
-                          getCategoryColor(post.category).withOpacity(0.5),
-                    ),
-                ],
-              ),
               Row(
                 children: [
                   Icon(Icons.account_circle, size: 16, color: Colors.grey),
@@ -62,25 +32,72 @@ class PostCard extends StatelessWidget {
                   Text(
                     post.author,
                     style: montserratBody.copyWith(
-                      fontSize: 12,
+                      fontSize: 13,
                       color: Colors.black87,
+                    ),
+                  ),
+                  SizedBox(width: 240),
+                  Align(
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
+                          onTap: () => Get.toNamed(Routes.createPage),
+                          child: Icon(Icons.bookmark_border_outlined)))
+                ],
+              ),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      post.title,
+                      style: homePostTitle.copyWith(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.indigo,
+                      ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
-              if (post.imageUrl.isNotEmpty)
-                _buildImageWithBottomFade(post.imageUrl),
-              const SizedBox(height: 10),
-              Text(
-                post.text,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: homePostText.copyWith(
-                  color: Colors.black87,
-                  fontSize: 14,
-                ),
+
+              Row(
+                children: [
+                  if (category == 'All')
+                    Text(
+                      post.category,
+                      style: montserratBody.copyWith(
+                        fontSize: 9,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                ],
               ),
+              SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      post.text,
+                      maxLines: 7,
+                      overflow: TextOverflow.ellipsis,
+                      style: homePostText.copyWith(
+                        color: Colors.black87,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  if (post.imageUrl.isNotEmpty)
+                    _buildImageWithBottomFade(post.imageUrl),
+                ],
+              ),
+              // const SizedBox(height: 10),
+              //
+              // const SizedBox(height: 10),
+
               const SizedBox(height: 10),
               Row(
                 children: [
@@ -89,7 +106,7 @@ class PostCard extends StatelessWidget {
                     post.formattedTime,
                     style: montserratBody.copyWith(
                       fontSize: 12,
-                      color: Colors.black45,
+                      color: Colors.black54,
                     ),
                   ),
                 ],
@@ -102,39 +119,41 @@ class PostCard extends StatelessWidget {
   }
 
   Widget _buildImageWithBottomFade(String imageUrl) {
-    return Container(
-      height: 200,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: Image.network(
-              imageUrl,
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.grey.withOpacity(0.1),
-                    Colors.white,
-                  ],
-                  stops: [0.9, 1.0],
-                ),
+    return Expanded(
+      child: Container(
+        height: 150,
+        width: 150,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: Image.network(
+                imageUrl,
+                height: 200,
+                width: double.infinity,
+                fit: BoxFit.cover,
               ),
             ),
-          ),
-        ],
+            // Positioned.fill(
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //       gradient: LinearGradient(
+            //         begin: Alignment.topCenter,
+            //         end: Alignment.bottomCenter,
+            //         colors: [
+            //           Colors.grey.withOpacity(0.1),
+            //           Colors.white,
+            //         ],
+            //         stops: [0.9, 1.0],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }
@@ -152,7 +171,7 @@ class PostCard extends StatelessWidget {
       case 'Technology':
         return Colors.indigo;
       default:
-        return Colors.grey;
+        return Colors.red;
     }
   }
 }

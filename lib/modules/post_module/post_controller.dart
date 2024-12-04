@@ -1,19 +1,18 @@
 import 'dart:io';
+import 'package:blog_app/data/models/post.dart';
+import 'package:blog_app/data/models/user.dart';
+import 'package:blog_app/data/repositories/post_repository.dart';
 import 'package:blog_app/data/repositories/user_repository.dart';
-import 'package:flutter/material.dart';
+import 'package:blog_app/globals/globals.dart';
+import 'package:blog_app/modules/home_module/home_controller.dart';
+import 'package:blog_app/modules/profile_module/profile_controller.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../data/models/post.dart';
-import '../../data/models/user.dart';
-import '../../data/repositories/post_repository.dart';
-import '../../globals/globals.dart';
-import '../home_module/home_controller.dart';
-import '../profile_module/profile_controller.dart';
-
 class PostController extends GetxController {
   final post = Post.empty().obs;
+  final profileController = Get.find<ProfileController>();
 
   final postRepository = PostRepository();
   final userRepository = UserRepository();
@@ -30,7 +29,6 @@ class PostController extends GetxController {
     currentUser = (await userRepository.getCurrentUser())!;
   }
 
-  final isUploading = false.obs;
   var isEditing = false;
 
   Rxn<XFile>? imageFile = Rxn<XFile>();
@@ -67,13 +65,21 @@ class PostController extends GetxController {
   }
 
   void deletePost(Post post) async {
-    postRepository.deletePost(post);
-    Get.back();
-    Get.snackbar('Success', 'Post successfully deleted.');
-    Get.find<ProfileController>().getUserPosts();
+    profileController.isUpdating = true;
+    try {
+      postRepository.deletePost(post);
+      Get.back();
+      Get.snackbar('Success', 'Post successfully deleted.');
+      await Get.find<ProfileController>().getUserPosts();
+    } catch (e) {
+      Get.snackbar('Error', 'Something went wrong.');
+    } finally {
+      profileController.isUpdating = false;
+    }
   }
 
   Future<void> uploadPost(XFile? imageFile) async {
+    //true
     Post newPost = Post(
         id: '',
         title: post.value.title,
@@ -83,27 +89,28 @@ class PostController extends GetxController {
         createdAt: now,
         imageUrl: '',
         authorUid: currentUser.id);
-
-    isUploading.value = true;
     if (imageFile == null) {
-      isUploading.value = false;
       Get.snackbar('Error', 'please select an image');
       return;
     }
     try {
       await postRepository.addPostWithImage(
           post: newPost, imageFile: File(imageFile.path));
-      Get.find<HomeController>().loadPosts();
+
+      await Get.find<HomeController>().loadPosts();
+      update();
       Get.find<ProfileController>().getUserPosts();
     } catch (e) {
+      print(e);
       Get.snackbar('Error', 'error uploading post');
     } finally {
-      isUploading.value = false;
-
+      update();
+      print('-ee-e-eeeee-----');
     }
   }
 
   Future<void> updatePost() async {
+    profileController.isUpdating = true;
     Post updatedPost = Post(
         id: post.value.id,
         title: post.value.title,
@@ -114,17 +121,16 @@ class PostController extends GetxController {
         updatedAt: now,
         imageUrl: '',
         authorUid: post.value.authorUid);
-
-    isUploading.value = true;
     try {
       await postRepository.updatePost(updatedPost,
           imageFile?.value != null ? File(imageFile!.value!.path) : null);
-      Get.find<ProfileController>().getUserPosts();
+
       Get.snackbar('Successful', 'Post successfully updated.');
+      await Get.find<ProfileController>().getUserPosts();
     } catch (e) {
       Get.snackbar('Error', 'error updating post');
     } finally {
-      isUploading.value = false;
+      profileController.isUpdating = false;
     }
   }
 

@@ -16,17 +16,15 @@ class HomeController extends GetxController {
   bool isSortedByDate = false;
 
   Future<void> loadPosts() async {
+    isLoading = true;
+    update();
     try {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        isLoading = true;
-        update();
-        await Future.delayed(Duration(seconds: 1), () async {
-          posts = await postRepository.getAllPosts();
-        });
-        isLoading = false;
+        posts = await postRepository.getAllPosts();
+
         displayedPosts = posts
             .map((post) => post.copyWith(
-          id: post.id,
+                id: post.id,
                 title: post.title,
                 text: post.text,
                 author: post.author,
@@ -34,6 +32,8 @@ class HomeController extends GetxController {
                 category: post.category))
             .toList();
         print('posts loaded');
+        isLoading = false;
+
         update();
       });
     } catch (e) {
@@ -44,7 +44,8 @@ class HomeController extends GetxController {
   void getFilteredPosts() {
     if (selectedCategory.value == 'All') {
       displayedPosts = posts
-          .map((post) => post.copyWith(id: post.id,
+          .map((post) => post.copyWith(
+              id: post.id,
               title: post.title,
               text: post.text,
               author: post.author,
@@ -80,6 +81,10 @@ class HomeController extends GetxController {
   }
 
   void getSortedPosts() {
+    print('sort function');
     displayedPosts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    for (var post in displayedPosts) {
+      print('${post.createdAt}');
+    }
   }
 }
