@@ -44,3 +44,11 @@ To run this project, you need the following installed on your system:
 
 ## SCREENSHOTS
 
+| Home | Create | Image | Preview |
+| --- | --- | --- | --- |
+| ![Home Page](/screenshots/home.PNG) | ![Create Page](/screenshots/create.PNG) | ![Crop Image](/screenshots/crop.PNG) | ![Preview Page](/screenshots/preview.PNG) |
+
+| Profile | Edit/Delete | Login | Signup |
+| --- | --- | --- | --- | 
+| ![Profile Page](/screenshots/profile.PNG) | ![Edit-Delete](/screenshots/edit-delete.PNG) | ![Login](/screenshots/login.PNG) | ![Signup](/screenshots/signup.PNG) |
+
