@@ -14,8 +14,8 @@ class Post {
 
   Post(
       {required this.id,
-        this.updatedAt,
-        required this.authorUid,
+      this.updatedAt,
+      required this.authorUid,
       required this.title,
       required this.text,
       required this.author,
@@ -42,7 +42,9 @@ class Post {
         author: '',
         category: '',
         createdAt: DateTime.now(),
-        imageUrl: '', authorUid: '', id: '');
+        imageUrl: '',
+        authorUid: '',
+        id: '');
   }
 
   Map<String, dynamic> toMap() {
@@ -52,7 +54,7 @@ class Post {
       'text': text,
       'author': author,
       'category': category,
-      'updatedAt':updatedAt,
+      'updatedAt': updatedAt,
       'createdAt': Timestamp.fromDate(createdAt),
       'imageUrl': imageUrl
     };
@@ -67,7 +69,7 @@ class Post {
       required String category,
       String imageUrl = ''}) {
     return Post(
-      id: this.id,
+        id: this.id,
         title: this.title,
         text: this.text,
         author: this.author,

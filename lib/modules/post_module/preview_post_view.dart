@@ -51,43 +51,43 @@ class PreviewPost extends StatelessWidget {
 
   Widget _imagePicker() {
     return Obx(
-          () => Stack(
+      () => Stack(
         children: [
           SizedBox(
             width: double.infinity,
             height: 250,
             child: postController.isEditing &&
-                postController.post.value.imageUrl.isNotEmpty
+                    postController.post.value.imageUrl.isNotEmpty
                 ? GestureDetector(
-                onTap: postController.pickImage,
-                child: postController.imageFile?.value != null
-                    ? Image.file(
-                  File(postController.imageFile?.value?.path ?? ''),
-                  fit: BoxFit.cover,
-                )
-                    : Image.network(postController.post.value.imageUrl,
-                    fit: BoxFit.cover))
+                    onTap: postController.pickImage,
+                    child: postController.imageFile?.value != null
+                        ? Image.file(
+                            File(postController.imageFile?.value?.path ?? ''),
+                            fit: BoxFit.cover,
+                          )
+                        : Image.network(postController.post.value.imageUrl,
+                            fit: BoxFit.cover))
                 : postController.imageFile?.value == null
-                ? GestureDetector(
-              onTap: postController.pickImage,
-              child: Container(
-                color: Colors.grey.shade300,
-                child: Center(
-                  child: Icon(
-                    Icons.add_photo_alternate_outlined,
-                    size: 50,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            )
-                : GestureDetector(
-              onTap: postController.pickImage,
-              child: Image.file(
-                File(postController.imageFile?.value?.path ?? ''),
-                fit: BoxFit.cover,
-              ),
-            ),
+                    ? GestureDetector(
+                        onTap: postController.pickImage,
+                        child: Container(
+                          color: Colors.grey.shade300,
+                          child: Center(
+                            child: Icon(
+                              Icons.add_photo_alternate_outlined,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: postController.pickImage,
+                        child: Image.file(
+                          File(postController.imageFile?.value?.path ?? ''),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
           ),
           goBackCircled(),
           Positioned(
@@ -98,15 +98,13 @@ class PreviewPost extends StatelessWidget {
         ],
       ),
     );
-
   }
 
   Widget postButton() {
     return ElevatedButton(
-        onPressed: ()  {
+        onPressed: () async {
           postController.uploadPost(postController.imageFile?.value);
           Get.offAllNamed(Routes.authHomePage);
-
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.indigo.shade600,
@@ -124,7 +122,6 @@ class PreviewPost extends StatelessWidget {
         onPressed: () {
           postController.updatePost();
           Get.offAllNamed(Routes.authHomePage, arguments: 4);
-
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.indigo.shade600,
