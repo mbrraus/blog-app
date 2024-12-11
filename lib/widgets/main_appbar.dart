@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../modules/home_module/home_controller.dart';
 class MainAppbar extends StatelessWidget implements PreferredSizeWidget{
   const MainAppbar({super.key});
 

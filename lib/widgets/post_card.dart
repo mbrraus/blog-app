@@ -37,11 +37,15 @@ class PostCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 240),
-                  Align(
-                      alignment: Alignment.topRight,
-                      child: GestureDetector(
-                          onTap: () => Get.toNamed(Routes.createPage),
-                          child: Icon(Icons.bookmark_border_outlined)))
+
+                  Expanded(
+                    child: Align(
+                        alignment: Alignment.topRight,
+                        child: GestureDetector(
+                            onTap: () => Get.toNamed(Routes.createPage),
+                            child: Icon(Icons.bookmark_border_outlined))),
+                  )
+         
                 ],
               ),
 
