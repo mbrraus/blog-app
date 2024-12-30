@@ -1,16 +1,54 @@
-# blog_app
+# FREELY
 
-A new Flutter project.
+## DESCRIPTION
 
-## Getting Started
+I developed Freely, a blog application designed to simplify the way users create, manage, and share content. With its user-friendly design, Freely enables *editors* to effortlessly create posts, categorize them, and upload images using an integrated cropping feature. For *viewers*, it offers a seamless experience to browse posts, filter them by categories, and enjoy beautifully designed layouts. Built using Flutter with the ***GetX*** state management package, Freely is connected to Firebase for authentication, Firestore for data storage, and Firebase Storage for handling images, ensuring a reliable and secure platform for all users.
 
-This project is a starting point for a Flutter application.
+## FEATURES
+#### Authentication System 
+Secure login for editors using  *Firebase Authentication*.
+#### Post Management 
+- Create, edit, and delete posts with ease.
+- Categorize posts for better organization.
+- Upload and crop images for posts using an integrated cropping feature.
+#### Profile Management
+- View and manage your posts in a dedicated profile section.
+- Edit or delete your posts effortlessly.
+#### Secure Storage
+The app uses Firebase Authentication for login, *Firestore* for storing data, and *Firebase Storage* for managing images, ensuring data security and reliability.
 
-A few resources to get you started if this is your first Flutter project:
+## Prerequisites
+To run this project, you need the following installed on your system:
+1. Flutter SDK (version 3.0 or above)
+2. Dart SDK (comes with Flutter installation).
+3. Firebase CLI for managing Firebase services.
+4. Android Studio or Visual Studio Code with Flutter and Dart extensions installed.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Installation
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/blog-app.git
+   cd blog-app
+   
+2. Install Dependencies:
+   ```bash
+   flutter pub get
+   
+3. Connect Firebase:
+   Follow the official [Firebase setup guide for Flutter](https://firebase.google.com/docs/flutter/setup?platform=ios).
+   
+4. Run the app:
+   ```bash
+   flutter run
+
+## SCREENSHOTS
+
+| Home | Create | Image | Preview |
+| --- | --- | --- | --- |
+| ![Home Page](/screenshots/home.PNG) | ![Create Page](/screenshots/create.PNG) | ![Crop Image](/screenshots/crop.PNG) | ![Preview Page](/screenshots/preview.PNG) |
+
+| Profile | Edit/Delete | Login | Signup |
+| --- | --- | --- | --- | 
+| ![Profile Page](/screenshots/profile.PNG) | ![Edit-Delete](/screenshots/edit-delete.PNG) | ![Login](/screenshots/login.PNG) | ![Signup](/screenshots/signup.PNG) |
+
