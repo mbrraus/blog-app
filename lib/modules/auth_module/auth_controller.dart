@@ -1,3 +1,4 @@
+import 'package:blog_app/modules/profile_module/profile_controller.dart';
 import 'package:blog_app/routes/routes.dart';
 import 'package:get/get.dart';
 
@@ -8,11 +9,13 @@ import '../../data/repositories/auth_repository.dart';
 class AuthController extends GetxController {
   final authRepository = AuthRepository();
   final userRepository = UserRepository();
+  var profileController = Get.find<ProfileController>();
 
   Future<void> login(String email, String password) async {
     final firebaseUser = await authRepository.loginUserWithEmailAndPassword(
         email, password);
     if (firebaseUser != null) {
+        profileController.getUserInfo();
         Get.offAllNamed(Routes.authHomePage);
       }
     }
@@ -28,6 +31,7 @@ class AuthController extends GetxController {
           email: firebaseUser.email!,
           role: Role.editor);
       await userRepository.addUser(user);
+      profileController.getUserInfo();
       Get.offAllNamed(Routes.authHomePage);
     }
   }

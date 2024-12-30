@@ -16,6 +16,7 @@ class AuthRepository {
   }
 
   Future<User?> getCurrentUser() async {
+    print('here is the current user: ${_firebaseAuth.currentUser}');
     return _firebaseAuth.currentUser;
   }
 
@@ -42,7 +43,6 @@ class AuthRepository {
     try {
       final cred = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      print('were here');
       return cred.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

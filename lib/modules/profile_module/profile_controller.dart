@@ -29,7 +29,7 @@ class ProfileController extends GetxController {
   }
 
   Future<void> getUserInfo() async {
-    final firebaseUser = await userRepository.authRepository.getCurrentUser();
+    final firebaseUser = await authRepository.getCurrentUser();
     if (firebaseUser != null) {
       final appUser.User? user = await userRepository.getCurrentUser();
       if (user != null) {
@@ -41,8 +41,6 @@ class ProfileController extends GetxController {
 
   String getFullName() {
     if (currentUser.value != null) {
-      print(
-          '${currentUser.value?.name ?? ''} ${currentUser.value?.surname ?? ''}');
       return '${currentUser.value?.name ?? ''} ${currentUser.value?.surname ?? ''}';
     }
     return '';

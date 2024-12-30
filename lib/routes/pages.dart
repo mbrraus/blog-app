@@ -20,7 +20,7 @@ class Pages {
         name: Routes.profilePage,
         page: () => UserProfile(),
         binding: BindingsBuilder(() {
-           Get.put(ProfileController());
+          Get.put(ProfileController());
           Get.put(PostController());
         })),
     GetPage(
@@ -29,7 +29,12 @@ class Pages {
         binding: BindingsBuilder(() {
           Get.put(SplashController());
         })),
-    GetPage(name: Routes.homePage, page: () => HomeBar()),
+    GetPage(
+        name: Routes.homePage,
+        page: () => HomeBar(),
+        binding: BindingsBuilder(() {
+          Get.put(PostController());
+        })),
     GetPage(name: Routes.postDetailPage, page: () => PostDetailView()),
     GetPage(name: Routes.loginPage, page: () => LoginScreen()),
     GetPage(name: Routes.signupPage, page: () => SignupScreen()),

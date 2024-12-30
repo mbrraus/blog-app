@@ -18,7 +18,7 @@ class UserRepository {
       if (user != null) {
         var userData = await _usersCollection
             .doc(user.uid)
-            .get(); //dokumanin uidsi userin uidsine esit olacak
+            .get();
         if (userData.exists) {
           return appUser.User.fromMap(
               userData.data() as Map<String, dynamic>, user.uid);

@@ -37,7 +37,6 @@ class PostCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 240),
-
                   Expanded(
                     child: Align(
                         alignment: Alignment.topRight,
@@ -45,7 +44,6 @@ class PostCard extends StatelessWidget {
                             onTap: () => Get.toNamed(Routes.createPage),
                             child: Icon(Icons.bookmark_border_outlined))),
                   )
-         
                 ],
               ),
 

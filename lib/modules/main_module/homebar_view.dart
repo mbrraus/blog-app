@@ -29,7 +29,7 @@ class _HomeBarState extends State<HomeBar> {
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
         bottomNavigationBar: NavigationBar(
-          backgroundColor: Colors.indigo.shade50,
+          backgroundColor: Colors.white,
           height: 75,
           onDestinationSelected: (int index) {
             if (index == 2) {
